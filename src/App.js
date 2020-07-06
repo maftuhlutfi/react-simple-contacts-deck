@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import {SearchField} from './components/SearchField';
+import {CardContainer} from './components/CardContainer';
+import {CardItem} from './components/CardItem';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      contacts: [],
+      searchInput: ''
+    }
+  }
+
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json())
+      .then(users => this.setState({contacts: users}))
+  }
+
+  render() {
+    const {contacts, searchInput} = this.state;
+    const filteredContacts = contacts.filter(contact => 
+      contact.name.toLowerCase().includes(searchInput.toLowerCase())
+    )
+
+    const handleChange = e => {
+      this.setState({searchInput: e.target.value});
+    }
+
+    return (
+      <div className="App">
+        <h1>Simple Contacts Search</h1>
+        <SearchField handleChange={handleChange} />
+        <CardContainer>
+          {filteredContacts.map(contact => 
+            <CardItem 
+              key={contact.id}
+              id={contact.id}
+              name={contact.name}
+              phone={contact.phone}
+              email={contact.email}
+            />
+          )}
+        </CardContainer>
+      </div>
+    )
+  }
+  
 }
 
 export default App;

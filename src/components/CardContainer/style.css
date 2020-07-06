@@ -1,0 +1,15 @@
+.card-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 30px;
+	padding: 50px 10%;
+}
+
+@media only screen and (max-width: 1200px) {
+	.card-container {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-gap: 30px;
+		padding: 50px 10%;
+	}
+}
